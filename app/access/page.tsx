@@ -1,9 +1,9 @@
 "use client"
 
-import { motion } from 'framer-motion';
+import { motion, Variant, Variants } from 'framer-motion';
 import AppLayout from '../components/AppLayout';
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -13,7 +13,7 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
@@ -25,7 +25,7 @@ const itemVariants = {
   }
 };
 
-const titleVariants = {
+const titleVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
@@ -37,7 +37,7 @@ const titleVariants = {
   }
 };
 
-const underlineVariants = {
+const underlineVariants: Variants = {
   initial: { scaleX: 0 },
   hover: {
     scaleX: 1,
@@ -49,8 +49,8 @@ export default function Access() {
   return (
      <>
      <AppLayout>
-      <div className="bg-[url('/images/Access/access_bg2.jpg')] ">
-        <section className="relative bg-[url('/images/Access/access_top.jpg')] bg-cover bg-center h-[30vh] md:h-[35vh] lg:h-[45vh] xl:h-[50vh] flex items-center justify-center">
+      <div className="bg-[url('/images/access/access_bg2.jpg')] ">
+        <section className="relative bg-[url('/images/access/access_top.jpg')] bg-cover bg-center h-[30vh] md:h-[35vh] lg:h-[45vh] xl:h-[50vh] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/20 z-10" />
         </section>
         <div className='text-center mt-[3vh] md:mt-[5vh] lg:mt-[6vh]'>
