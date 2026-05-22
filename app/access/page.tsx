@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, Variant, Variants } from 'framer-motion';
+import { motion, Variants,} from 'framer-motion';
 import AppLayout from '../components/AppLayout';
 
 const containerVariants: Variants = {
@@ -12,7 +12,7 @@ const containerVariants: Variants = {
     }
   }
 };
-
+``
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
