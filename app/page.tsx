@@ -950,7 +950,7 @@ export default function Home() {
             className="mt-8 pt-8 border-t border-gray-600 text-center text-sm"
             variants={fadeInUp}
           >
-            <p>&copy; 2025 鏡花水月城. All rights reserved.</p>
+            <p>&copy; 2026 鏡花水月城. All rights reserved.</p>
           </motion.div>
         </motion.div>
       </div>
