@@ -7,8 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { motion, Variants } from "framer-motion";
 import Link from 'next/link';
-import { News, MenuItem } from '@/types/index'; // 共通型をインポート
-
+import { News, MenuItem } from '@/types/index';
 const MotionLink = motion.create(Link);
 
 // アニメーション設定 (Variants)
