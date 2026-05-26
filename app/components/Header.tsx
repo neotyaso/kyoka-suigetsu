@@ -13,7 +13,7 @@ export default function Header() {
 
     const menuItems = [
         { name: "見どころ", href: "/highlight" },
-        { name: "歴史", href: "/history" },
+        { name: "歴史", href: "/story" },
         { name: "お知らせ", href: "/news" },
         { name: "利用案内", href: "/access" },
         { name: "アクセス", href: "/access" },
