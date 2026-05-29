@@ -135,7 +135,7 @@ export default function ContactIndex(): React.JSX.Element {
               className="bg-[#5c554f] hover:bg-[#403c37] text-white w-full max-w-md py-3 md:py-4 rounded font-yuji font-bold transition-all duration-300 disabled:opacity-50 text-base lg:text-lg xl:text-xl"
               disabled={processing}
             >
-              {processing ? '送信中...' : '確認画面へ進む（送信）'}
+              {processing ? '送信中...' : '送信'}
             </button>
           </div>
         </form>
