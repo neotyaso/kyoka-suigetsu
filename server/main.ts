@@ -1,6 +1,9 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 const app = new Hono()
 
@@ -26,8 +29,18 @@ app.get('/api/admin/contacts', (c) => {
 })
 
 // 📢 お知らせ一覧（最新の配列を返すように修正）
-app.get('/api/admin/news', (c) => {
-  return c.json(dummyNews)
+app.get('/api/admin/news', async (c) => {
+  try {
+    // 💡 本物のデータベースからデータを取ってくる魔法の処理
+    const newsList = await prisma.news.findMany({
+      orderBy: {
+        id: 'desc', // 新しい順に並べる
+      },
+    })
+    return c.json(newsList)
+  } catch (error) {
+    return c.json({ error: 'お知らせの取得に失敗しました' }, 500)
+  }
 })
 
 // 🚀 新しくお知らせを投稿する窓口（追加）
