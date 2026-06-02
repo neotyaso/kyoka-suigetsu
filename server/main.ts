@@ -2,8 +2,10 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { PrismaClient } from '@prisma/client'
+import path from 'path'
 
-const prisma = new PrismaClient()
+
+const prisma = new PrismaClient() 
 
 const app = new Hono()
 
@@ -47,16 +49,13 @@ app.get('/api/admin/news', async (c) => {
 app.post('/api/admin/news', async (c) => {
   const body = await c.req.json()
   
-  // 新しいお知らせオブジェクトを作成
-  const newPost = {
-    id: dummyNews.length + 1,
-    title: body.title,
-    content: body.content,
-    date: new Date().toISOString().split('T')[0] // 今日のお日付（YYYY-MM-DD）
-  }
-
-  // 配列の「先頭」に追加することで、常に最新順にする
-  dummyNews = [newPost, ...dummyNews]
+  const newPost = await prisma.news.create({
+    data: {
+      title: body.title,
+      content: body.content,
+      date: new Date().toISOString().split('T')[0]
+    }
+  })
 
   console.log('新しくお知らせが布告されました:', newPost)
   return c.json({ success: true, news: newPost })
