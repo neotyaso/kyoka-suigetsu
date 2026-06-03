@@ -1,9 +1,9 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, Variants } from "framer-motion";
 import AppLayout from '../components/AppLayout';
-import { News as NewsType } from "@/types/index"; // 衝突を防ぐため別名でインポート
+import { News as NewsType } from "@/types/index";
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -18,16 +18,28 @@ const itemVariants: Variants = {
   })
 };
 
-const dummyNews: NewsType[] = [
-  {
-    id: 1,
-    title: "お知らせタイトル1",
-    content: "お知らせの内容1",
-    createdAt: "2024-01-01"
-  }
-];
+export default function News(): React.JSX.Element {
+  const [newsList, setNewsList] = useState<NewsType[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default function News({ newsList = dummyNews }: { newsList?: NewsType[] }): React.JSX.Element {
+  // 画面が開いた瞬間に Hono (8000番) からデータを取ってくる
+  useEffect(() => {
+    async function fetchNews() {
+      try {
+        const res = await fetch('http://localhost:8000/api/admin/news');
+        if (res.ok) {
+          const data = await res.json();
+          setNewsList(data);
+        }
+      } catch (error) {
+        console.error("お知らせの取得に失敗しました:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchNews();
+  }, []);
+
   return (
     <AppLayout>
       <section className="bg-[url('/images/News/bg_sui.png')] bg-cover pb-[5vh]">
@@ -48,27 +60,33 @@ export default function News({ newsList = dummyNews }: { newsList?: NewsType[] }
         </h2>
 
         <div className="space-y-6 xl:space-y-10 mx-[4vw] mt-[5vh] xl:mt-[6vh] font-yuji">
-          {newsList.map((item, index) => (
-            <motion.div
-              key={item.id}
-              className="p-[6vw] rounded-lg shadow-md bg-white/40"
-              custom={index}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={itemVariants}
-            >
-              <p className="text-sm md:text-base lg:text-lg xl:text-xl text-gray-700 mb-[1vh]">
-                {new Date(item.createdAt).toLocaleDateString()}
-              </p>
-              <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold mb-[2vh]">
-                {item.title}
-              </h3>
-              <p className="text-gray-700 lg:text-lg xl:text-xl">
-                {item.content}
-              </p>
-            </motion.div>
-          ))}
+          {loading ? (
+            <p className="text-center text-gray-500 text-lg">お知らせを確認中...</p>
+          ) : newsList.length === 0 ? (
+            <p className="text-center text-gray-500 text-lg">現在、お知らせはありません。</p>
+          ) : (
+            newsList.map((item, index) => (
+              <motion.div
+                key={item.id}
+                className="p-[6vw] rounded-lg shadow-md bg-white/40"
+                custom={index}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={itemVariants}
+              >
+                <p className="text-sm md:text-base lg:text-lg xl:text-xl text-gray-700 mb-[1vh]">
+                  {new Date(item.createdAt || new Date()).toLocaleDateString('ja-JP')}
+                </p>
+                <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold mb-[2vh]">
+                  {item.title}
+                </h3>
+                <p className="text-gray-700 lg:text-lg xl:text-xl whitespace-pre-wrap">
+                  {item.content}
+                </p>
+              </motion.div>
+            ))
+          )}
         </div>
       </section>
     </AppLayout>

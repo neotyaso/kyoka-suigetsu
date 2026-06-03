@@ -1,3 +1,4 @@
+// types/index.ts
 
 // お知らせ（News）用の型
 export type News = {
@@ -19,7 +20,12 @@ export interface SeasonItem {
   buttonColor: string;
 }
 
-// アクセス案内（Access）用の型
+// 💡 アクセス案内（Access）用に新しく定義・追加
+export interface AccessInfoItem {
+  title: string;
+  content: React.ReactNode; 
+}
+
 export interface InfoSectionProps {
   title: string;
   children: React.ReactNode;
@@ -29,7 +35,6 @@ export interface AccessMethod {
   label: string;
   detail: string;
 }
-
 
 // トップページ（Home）用の型
 export interface MenuItem {

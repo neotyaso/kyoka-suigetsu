@@ -40,32 +40,30 @@ export default function ContactIndex(): React.JSX.Element {
   };
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    
-    // 入力チェックでエラーがあれば処理を中断
-    if (!validate()) return;
+  e.preventDefault();
+  
+  if (!validate()) return;
 
-    setProcessing(true);
+  setProcessing(true);
 
-    try {
-      // TODO: 後でHonoのAPI（例: /api/contact）に送信する処理を書く
-      // const response = await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data),
-      // });
-      
-      console.log("Hono APIに送信するデータ:", data);
-      
-      // 送信成功したらフォームをクリア
-      setData({ name: '', email: '', message: '' });
-      alert("お問い合わせを受け付けました。");
-    } catch (error) {
-      console.error("送信エラー:", error);
-    } finally {
-      setProcessing(false);
-    }
+  try {
+    const response = await fetch('http://localhost:8000/api/contacts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) throw new Error('送信失敗');
+
+    setData({ name: '', email: '', message: '' });
+    alert("お問い合わせを受け付けました。");
+  } catch (error) {
+    console.error("送信エラー:", error);
+    alert("送信に失敗しました。もう一度お試しください。");
+  } finally {
+    setProcessing(false);
   }
+}
 
   return (
     <AppLayout>

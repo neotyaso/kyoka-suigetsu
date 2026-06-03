@@ -7,6 +7,8 @@ import path from 'path'
 
 const prisma = new PrismaClient() 
 
+
+
 const app = new Hono()
 
 app.use('/*', cors({
@@ -25,9 +27,20 @@ let dummyContacts = [
   { id: 1, name: '織田 信長', email: 'nobunaga@example.com', message: '鏡花水月城の天守閣の見学時間を教えてほしい。', createdAt: '2026-05-28' },
 ]
 
-// お問い合わせ一覧（変更なし）
-app.get('/api/admin/contacts', (c) => {
-  return c.json(dummyContacts)
+// 🔍 届いたお問い合わせを一覧で取得する（新しい順）
+app.get('/api/admin/contacts', async (c) => {
+  try {
+    // 💡 余計な引数は一切なし！Prisma 6の正しい全件取得の書き方です
+    const contacts = await prisma.contact.findMany({
+      orderBy: {
+        id: 'desc', // 新しい順に並べる
+      },
+    })
+    return c.json(contacts)
+  } catch (error) {
+    console.error("お問い合わせ取得エラー:", error)
+    return c.json({ error: 'お問い合わせ一覧の取得に失敗しました' }, 500)
+  }
 })
 
 // 📢 お知らせ一覧（最新の配列を返すように修正）
@@ -62,17 +75,27 @@ app.post('/api/admin/news', async (c) => {
 })
 
 // お問い合わせ送信窓口
-app.post('/api/contact', async (c) => {
-  const body = await c.req.json()
-  const newContact = {
-    id: dummyContacts.length + 1,
-    name: body.name,
-    email: body.email,
-    message: body.message,
-    createdAt: new Date().toISOString().split('T')[0]
+// 📥 お問い合わせを受け付ける窓口（データベースへ保存）
+app.post('/api/contacts', async (c) => {
+  try {
+    const body = await c.req.json()
+
+    // 💡 Prismaを使って SQLite の Contact テーブルに保存します
+    const newContact = await prisma.contact.create({
+      data: {
+        name: body.name,
+        email: body.email,
+        message: body.message,
+        createdAt: new Date().toISOString(), // 送信された日時
+      },
+    })
+
+    console.log('データベースにお問い合わせが記録されました:', newContact)
+    return c.json({ success: true, contact: newContact })
+  } catch (error) {
+    console.error(error)
+    return c.json({ error: 'お問い合わせの送信に失敗しました' }, 500)
   }
-  dummyContacts = [newContact, ...dummyContacts]
-  return c.json({ success: true })
 })
 
 const port = 8000
