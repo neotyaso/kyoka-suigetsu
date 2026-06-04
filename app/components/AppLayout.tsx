@@ -1,3 +1,4 @@
+import CastleChat from "./CastleChat";
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -10,6 +11,7 @@ export default function AppLayout({ children }: Props) {
         <div>
             <Header />
             <main>{children}</main>
+            <CastleChat />
             <Footer />
         </div>
     );
