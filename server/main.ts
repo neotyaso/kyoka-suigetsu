@@ -171,7 +171,7 @@ app.post('/api/castle-chat', async (c) => {
     const { message } = await c.req.json()
 
     // Pythonのチャット窓口へ横流し
-    const pythonResponse = await fetch('http://127.0.0.1:5000/api/ai/chat', {
+    const pythonResponse = await fetch('http://127.0.0.1:8080/api/ai/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message })

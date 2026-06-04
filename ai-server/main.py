@@ -16,6 +16,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+if os.path.exists(env_path):
+    with open(env_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            if line.strip() and not line.startswith('#'):
+                key, value = line.strip().split('=', 1)
+                os.environ[key] = value.strip('"').strip("'")
+
 # 💡 ご自身の Groq の API キーに書き換えてください
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
@@ -80,4 +88,4 @@ async def chat_with_castle_ai(data: ChatInput):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)

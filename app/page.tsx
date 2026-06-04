@@ -8,6 +8,7 @@ import HomeAccess from './components/HomeAccess';
 import HomeFooter from './components/HomeFooter';
 import HomeHeader from './components/HomeHeader';
 import HomeNews from './components/HomeNews'; 
+import CastleChat from './components/CastleChat';
 
 
 
@@ -30,6 +31,7 @@ export default function Home(): React.JSX.Element {
       <HomeNews />
       {/* 利用案内セクション */}
       <HomeAccess />
+      <CastleChat />
       {/* フッター */}
       <HomeFooter />
     </>
