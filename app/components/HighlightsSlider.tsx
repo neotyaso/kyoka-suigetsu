@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion} from "framer-motion";
-import { fadeInUp, staggerContainer } from '../constants/animations';
+import { fadeInUp } from '../constants/animations';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
