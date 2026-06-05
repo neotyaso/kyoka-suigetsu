@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut, useSession } from "next-auth/react"
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
@@ -18,7 +19,6 @@ interface News {
   date: string;
 }
 
-// 💡 AIの解析結果の型を定義
 interface AIAnalysis {
   category: string;
   urgency: string;
@@ -31,18 +31,17 @@ export default function AdminDashboard(): React.JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'all' | 'contacts' | 'news'>('all');
 
-  // お知らせ投稿・編集用の状態管理
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editingNewsId, setEditingNewsId] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState<string>('');
   const [newContent, setNewContent] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  // 💡 AI解析用の状態管理
-  const [analyzingId, setAnalyzingId] = useState<number | null>(null); // 現在解析中のカードID
-  const [aiResults, setAiResults] = useState<{ [key: number]: AIAnalysis }>({}); // IDごと結果を記憶
+  const [analyzingId, setAnalyzingId] = useState<number | null>(null);
+  const [aiResults, setAiResults] = useState<{ [key: number]: AIAnalysis }>({});
 
-  const currentUser = { name: "城主 (あなた)" };
+  // 💡 NextAuthからログイン中のセッション情報を取得
+  const { data: session, status } = useSession();
 
   async function fetchAdminData() {
     try {
@@ -62,28 +61,23 @@ export default function AdminDashboard(): React.JSX.Element {
   }
 
   useEffect(() => {
-    fetchAdminData();
-  }, []);
+    if (status === "authenticated") {
+      fetchAdminData();
+    }
+  }, [status]);
 
   // 🗑️ お知らせを削除する関数
   async function handleDeleteNews(id: number) {
     if (!confirm("このお知らせを削除しますか？")) return;
-
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/news/${id}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        await fetchAdminData();
-      } else {
-        alert("削除に失敗しました。");
-      }
+      const response = await fetch(`http://localhost:8000/api/admin/news/${id}`, { method: 'DELETE' });
+      if (response.ok) await fetchAdminData();
+      else alert("削除に失敗しました。");
     } catch (error) {
       console.error("削除エラー:", error);
     }
   }
 
-  // 📝 編集モーダルを開く準備
   function openEditModal(item: News) {
     setEditingNewsId(item.id);
     setNewTitle(item.title);
@@ -91,25 +85,18 @@ export default function AdminDashboard(): React.JSX.Element {
     setIsModalOpen(true);
   }
 
-  // 🚀 送信処理（新規投稿 or 更新）
   async function handleSubmitNews(e: React.FormEvent) {
     e.preventDefault();
     if (!newTitle || !newContent) return alert("件名と本文を入力してください。");
-
     setIsSubmitting(true);
     try {
-      const url = editingNewsId 
-        ? `http://localhost:8000/api/admin/news/${editingNewsId}`
-        : 'http://localhost:8000/api/admin/news';
-      
+      const url = editingNewsId ? `http://localhost:8000/api/admin/news/${editingNewsId}` : 'http://localhost:8000/api/admin/news';
       const method = editingNewsId ? 'PUT' : 'POST';
-
       const response = await fetch(url, {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: newTitle, content: newContent })
       });
-
       if (response.ok) {
         setNewTitle('');
         setNewContent('');
@@ -126,35 +113,23 @@ export default function AdminDashboard(): React.JSX.Element {
     }
   }
 
-  // ✅ お問い合わせの「対応 / 未対応」を切り替える関数
   async function handleMarkAsRead(id: number) {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/contacts/${id}/read`, {
-        method: 'PUT',
-      });
-      if (response.ok) {
-        await fetchAdminData(); 
-      } else {
-        alert("状態の更新に失敗しました。");
-      }
+      const response = await fetch(`http://localhost:8000/api/admin/contacts/${id}/read`, { method: 'PUT' });
+      if (response.ok) await fetchAdminData();
+      else alert("状態の更新に失敗しました。");
     } catch (error) {
       console.error("更新エラー:", error);
     }
   }
 
-  // 💡 Python AIを呼び出して解析する関数
   async function handleAIAnalyze(id: number) {
     setAnalyzingId(id);
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/contacts/${id}/analyze`, {
-        method: 'POST',
-      });
+      const response = await fetch(`http://localhost:8000/api/admin/contacts/${id}/analyze`, { method: 'POST' });
       if (response.ok) {
         const data = await response.json();
-        if (data.success) {
-          // 解析結果を特定のIDに紐づけて保存
-          setAiResults(prev => ({ ...prev, [id]: data.analysis }));
-        }
+        if (data.success) setAiResults(prev => ({ ...prev, [id]: data.analysis }));
       } else {
         alert("AI解析に失敗しました。Pythonサーバーのログを確認してください。");
       }
@@ -165,6 +140,24 @@ export default function AdminDashboard(): React.JSX.Element {
     }
   }
 
+  // 💡 門番のチェック（セッション読み込み中）
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#f3deb9] text-[#aeac78] font-yuji">
+        門番が通行手形を確認中...
+      </div>
+    );
+  }
+
+  // 💡 万が一未ログインでここに到達した場合の防衛線
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#f3deb9] text-gray-700 font-sans">
+        認証されていません。ログインし直してください。
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-[#f3deb9] text-[#aeac78] font-yuji">
@@ -173,7 +166,6 @@ export default function AdminDashboard(): React.JSX.Element {
     );
   }
 
-  // タイムラインの結合処理
   const timelineItems = [
     ...contacts.map(c => ({ ...c, type: 'contact' as const, timestamp: new Date(c.createdAt.split(',')[0]).getTime() })),
     ...news.map(n => ({ ...n, type: 'news' as const, timestamp: new Date(n.date).getTime() }))
@@ -185,6 +177,9 @@ export default function AdminDashboard(): React.JSX.Element {
     return true;
   });
 
+  // 💡 GitHubから取得した本名、またはメールアドレスを表示名にする
+  const currentUserName = session.user?.name || session.user?.email || "ユーザー名";
+
   return (
     <div className="min-h-screen bg-[#f3deb9] text-gray-800 flex flex-col font-yuji relative">
       
@@ -195,15 +190,26 @@ export default function AdminDashboard(): React.JSX.Element {
         <div className="flex items-center space-x-6 text-sm">
           <div className="flex items-center space-x-2">
             <span className="w-2 h-2 bg-[#e8aaa3] rounded-full"></span>
-            <span className="text-[#e8aaa3]">対座中: <strong className="text-[#e8aaa3]">{currentUser.name}</strong></span>
+            <span className="text-[#e8aaa3]">ログイン中: <strong className="text-[#e8aaa3]">{currentUserName}</strong></span>
           </div>
-          <button className="text-[#e8aaa3] hover:text-gray-900 transition-colors">アカウント追加</button>
-          <button className="border border-gray-400 hover:bg-white/40 px-3 py-1 rounded transition-colors text-xs text-gray-600">ログアウト</button>
+          <button 
+            onClick={() => alert("現在アカウントは追加できません。")}
+            className="text-[#e8aaa3] hover:text-gray-900 transition-colors cursor-pointer"
+          >
+            アカウント追加
+          </button>
+          
+          {/* 💡 本当に動くログアウトボタン */}
+          <button 
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="border border-gray-400 hover:bg-white/40 px-3 py-1 rounded transition-colors text-xs text-gray-600 font-sans cursor-pointer"
+          >
+            ログアウト
+          </button>
         </div>
       </header>
 
       <div className="flex-1 flex flex-col md:flex-row">
-        
         <aside className="w-full md:w-80 bg-[#aeac78] text-[#f3deb9] p-6 flex flex-col space-y-6 shrink-0">
           <div>
             <h2 className="text-2xl font-bold tracking-wide border-b border-white/20 pb-2 text-[#f3deb9]">管理画面</h2>
@@ -255,18 +261,15 @@ export default function AdminDashboard(): React.JSX.Element {
                   const isContact = item.type === 'contact';
                   const rawDate = isContact ? (item as any).createdAt || "" : "";
                   const isReplied = isContact && rawDate.includes(",DONE");
-                  
                   const displayDate = isContact ? rawDate.replace(",DONE", "") : (item as any).date;
-                  const analysis = aiResults[item.id]; // 💡 このカードのAI解析結果を取得
+                  const analysis = aiResults[item.id];
 
                   return (
                     <div 
                       key={`${item.type}-${item.id}`} 
                       className={`p-5 rounded-lg border border-gray-200/80 transition-all duration-200 
                         ${isContact 
-                          ? (isReplied 
-                              ? 'bg-gray-100 border-l-4 border-l-gray-400 opacity-60' 
-                              : 'bg-white border-l-4 border-l-[#e8aaa3]')          
+                          ? (isReplied ? 'bg-gray-100 border-l-4 border-l-gray-400 opacity-60' : 'bg-white border-l-4 border-l-[#e8aaa3]')          
                           : 'bg-white border-l-4 border-l-[#aeac78]'
                         }`}
                     >
@@ -281,19 +284,10 @@ export default function AdminDashboard(): React.JSX.Element {
                           )}
                           <h4 className="font-bold text-gray-800 text-base">{isContact ? `${(item as any).name} 様より` : (item as any).title}</h4>
                           
-                          {/* 💡 AIの解析バッジを横に並べる（バエる要素） */}
                           {isContact && analysis && (
                             <div className="flex space-x-1.5 font-sans text-[10px]">
-                              <span className="bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded border border-blue-200 font-bold">
-                                📦 {analysis.category}
-                              </span>
-                              <span className={`px-1.5 py-0.5 rounded border font-bold ${
-                                analysis.urgency === '高' 
-                                  ? 'bg-red-50 text-red-600 border-red-200 animate-pulse' 
-                                  : 'bg-yellow-50 text-yellow-600 border-yellow-200'
-                              }`}>
-                                🚨 緊急度: {analysis.urgency}
-                              </span>
+                              <span className="bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded border border-blue-200 font-bold">📦 {analysis.category}</span>
+                              <span className={`px-1.5 py-0.5 rounded border font-bold ${analysis.urgency === '高' ? 'bg-red-50 text-red-600 border-red-200 animate-pulse' : 'bg-yellow-50 text-yellow-600 border-yellow-200'}`}>🚨 緊急度: {analysis.urgency}</span>
                             </div>
                           )}
                         </div>
@@ -302,13 +296,10 @@ export default function AdminDashboard(): React.JSX.Element {
                       
                       <div className="text-sm text-gray-600 bg-gray-50/70 p-3 rounded border border-gray-100 whitespace-pre-wrap">{isContact ? (item as any).message : (item as any).content}</div>
                       
-                      {/* 💡 AIが生成した「城主風の返信下書き」を表示するエリア */}
                       {isContact && analysis && (
                         <div className="mt-3 p-4 bg-[#fcf8f2] border border-[#e8aaa3]/40 rounded-lg text-sm animate-in fade-in slide-in-from-top-2 duration-300">
                           <div className="flex items-center justify-between border-b border-[#e8aaa3]/20 pb-1.5 mb-2">
-                            <span className="text-xs font-bold text-[#c27c75] flex items-center">
-                              ✨ 城主の返答案（Groq AI自動生成）
-                            </span>
+                            <span className="text-xs font-bold text-[#c27c75] flex items-center">✨ 城主の返答案（Groq AI自動生成）</span>
                             <button 
                               onClick={() => navigator.clipboard.writeText(analysis.reply_draft).then(() => alert("返信文をコピーしました！"))}
                               className="text-[10px] text-gray-400 hover:text-[#c27c75] font-sans border border-gray-300 px-1.5 py-0.5 rounded bg-white transition-colors"
@@ -321,34 +312,11 @@ export default function AdminDashboard(): React.JSX.Element {
                       )}
 
                       <div className="flex justify-between items-center text-xs mt-3 pt-2 border-t border-gray-100 text-gray-400">
-                        <div>
-                          {isContact ? (
-                            <span className="text-gray-400 font-sans">{(item as any).email}</span>
-                          ) : null}
-                        </div>
-                        
+                        <div>{isContact ? <span className="text-gray-400 font-sans">{(item as any).email}</span> : null}</div>
                         <div className="flex space-x-4">
                           {isContact ? (
                             <>
-                              {/* 💡 AI解析ボタン（読み込み中はぐるぐるさせる） */}
-                              <button
-                                onClick={() => handleAIAnalyze(item.id)}
-                                disabled={analyzingId === item.id}
-                                className="text-indigo-600 hover:text-indigo-800 font-bold disabled:opacity-40 transition-colors"
-                              >
-                                {analyzingId === item.id ? "🔮 霊視解析中..." : "✨ AIで自動解析"}
-                              </button>
-
-                              <button 
-                                onClick={() => handleMarkAsRead(item.id)} 
-                                className={`font-bold transition-colors ${
-                                  isReplied 
-                                    ? 'text-gray-500 hover:text-[#aeac78]'   
-                                    : 'text-[#c27c75] hover:text-[#e8aaa3]'   
-                                }`}
-                              >
-                                {isReplied ? "未対応に戻す" : "対応済みにする"}
-                              </button>
+                              <button onClick={() => handleMarkAsRead(item.id)} className={`font-bold transition-colors ${isReplied ? 'text-gray-500 hover:text-[#aeac78]' : 'text-[#c27c75] hover:text-[#e8aaa3]'}`}>{isReplied ? "未対応に戻す" : "対応済みにする"}</button>
                             </>
                           ) : (
                             <>
@@ -367,7 +335,7 @@ export default function AdminDashboard(): React.JSX.Element {
         </main>
       </div>
 
-      {/* ─── 投稿・編集モーダル（共通化） ─── */}
+      {/* ─── 投稿・編集モーダル ─── */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-xl border border-gray-200 w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-150">
@@ -400,10 +368,7 @@ export default function AdminDashboard(): React.JSX.Element {
               <div className="flex justify-end space-x-3 pt-2 text-sm font-sans">
                 <button 
                   type="button" 
-                  onClick={() => {
-                    setIsModalOpen(false);
-                    setEditingNewsId(null);
-                  }}
+                  onClick={() => { setIsModalOpen(false); setEditingNewsId(null); }}
                   className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded transition-colors"
                 >
                   戻る
@@ -420,7 +385,6 @@ export default function AdminDashboard(): React.JSX.Element {
           </div>
         </div>
       )}
-
     </div>
   );
 }

@@ -11,7 +11,6 @@ export default function CastleChat() {
   ])
   const [loading, setLoading] = useState(false)
   
-  // 💡 ドラッグ中かどうかを判定するフラグ（アニメーションのガタつきを止める用）
   const [isDragging, setIsDragging] = useState(false)
 
   const nodeRef = useRef(null)
@@ -48,20 +47,16 @@ export default function CastleChat() {
     <Draggable 
       nodeRef={nodeRef} 
       handle=".drag-handle"
-      // 💡 ドラッグが始まったらフラグをtrueにして、アニメーションを一時停止する
       onStart={() => setIsDragging(true)}
-      // 💡 ドラッグが終わったらフラグをfalseに戻す
       onStop={() => setIsDragging(false)}
     >
       <div 
         ref={nodeRef} 
-        // 💡 will-change-transform を追加して、ブラウザに「これ動くよ！」と先回りして伝える（超重要）
         className="fixed bottom-6 right-6 z-50 font-sans will-change-transform select-none"
       >
         {/* ─── チャットウィンドウ ─── */}
         {isOpen && (
-          <div className={`mb-4 w-80 md:w-96 h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden ${
-            // 💡 ドラッグ中（isDraggingがtrue）の時は、遅延の原因になる transition を完全に無効化する！
+          <div className={`mb-4 w-80 md:w-96 h-125 bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden ${
             isDragging ? 'transition-none' : 'transition-all duration-300'
           }`}>
             
@@ -122,10 +117,8 @@ export default function CastleChat() {
           </div>
         )}
 
-        {/* ─── フワフワ浮かぶ丸型チャットアイコン ─── */}
         <button
           onClick={() => {
-            // 💡 ドラッグした直後に指を離した時は、ウィンドウが開かないようにするプチ工夫
             if (!isDragging) setIsOpen(!isOpen);
           }}
           className="w-14 h-14 bg-[#5c554f] hover:bg-[#5d4f43] text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 group relative drag-handle cursor-move"
