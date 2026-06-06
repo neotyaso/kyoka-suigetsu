@@ -3,9 +3,8 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import AppLayout from '../components/AppLayout';
-import { InfoSectionProps, AccessMethod } from "@/types/index"; // 共通型をインポート
+import { InfoSectionProps, AccessMethod } from "@/types/index"; 
 
-// アニメーション設定 (Variants)
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -48,7 +47,6 @@ const underlineVariants: Variants = {
   },
 };
 
-// 共通のセクションレイアウトコンポーネント
 const InfoSection: React.FC<InfoSectionProps> = ({ title, children }) => {
   return (
     <motion.section className="py-8 md:py-12" variants={itemVariants}>
@@ -75,7 +73,6 @@ const InfoSection: React.FC<InfoSectionProps> = ({ title, children }) => {
   );
 };
 
-// アクセス方法のデータ（型を安全に割り当て）
 const accessMethodsData: AccessMethod[] = [
   { label: "電車でお越しの場合", detail: "夢見駅から徒歩約15分" },
   { label: "バスでお越しの場合", detail: "夢見市内循環バス「白墨城前」下車すぐ" },
@@ -86,7 +83,6 @@ const accessMethodsData: AccessMethod[] = [
 export default function Access(): React.JSX.Element {
   return (
     <AppLayout>
-      {/* ⚠️ スタイル、余白、背景等は元のコードを完璧にキープしています */}
       <div className="bg-[url('/images/access/access_bg2.jpg')] bg-cover bg-fixed min-h-screen pb-16">
         {/* ヒーロー画像セクション */}
         <section className="relative bg-[url('/images/access/access_top.jpg')] bg-cover bg-center h-[30vh] md:h-[40vh] flex items-center justify-center">

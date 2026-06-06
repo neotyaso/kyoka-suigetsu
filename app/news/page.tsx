@@ -22,7 +22,6 @@ export default function News(): React.JSX.Element {
   const [newsList, setNewsList] = useState<NewsType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 画面が開いた瞬間に Hono (8000番) からデータを取ってくる
   useEffect(() => {
     async function fetchNews() {
       try {

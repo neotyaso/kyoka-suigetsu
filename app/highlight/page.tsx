@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '../components/AppLayout';
-import { SeasonKey, SeasonItem } from "@/types/index"; // 型定義をインポート
+import { SeasonKey, SeasonItem } from "@/types/index"; 
 
 const seasonsData: Record<SeasonKey, SeasonItem> = {
   spring: {

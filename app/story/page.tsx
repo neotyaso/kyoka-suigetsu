@@ -4,7 +4,6 @@ import React, { useRef } from 'react';
 import { motion, useInView, MotionProps } from 'framer-motion';
 import AppLayout from '../components/AppLayout';
 
-// 型定義 (Types)
 interface AnimatedProps extends MotionProps {
   children: React.ReactNode;
   className?: string;
@@ -12,18 +11,17 @@ interface AnimatedProps extends MotionProps {
 }
 
 interface TimelineItem {
-  yearEra: string;   // 例: "保元元年"
-  yearWestern: string; // 例: "(1156年)"
-  text: string;      // 本文
-  isHighlight?: boolean; // 特定の文字色変更用フラグ
+  yearEra: string;   
+  yearWestern: string;
+  text: string;      
+  isHighlight?: boolean; 
 }
 
 interface EraSection {
-  eraName: string; // 時代名 (例: "平安時代")
+  eraName: string; 
   items: TimelineItem[];
 }
 
-// 歴史のデータ構造 (Data)
 const historyData: EraSection[] = [
   {
     eraName: "平安時代",
@@ -147,7 +145,6 @@ const historyData: EraSection[] = [
   },
 ];
 
-// サブコンポーネント (Sub Components)
 const AnimatedDiv: React.FC<AnimatedProps> = ({ children, className = "", delay = 0, ...props }) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
@@ -182,7 +179,6 @@ const AnimatedLine: React.FC<{ delay?: number }> = ({ delay = 0 }) => {
   );
 };
 
-// メインコンポーネント (Main Component)
 export default function Story(): React.JSX.Element {
   return (
     <AppLayout>

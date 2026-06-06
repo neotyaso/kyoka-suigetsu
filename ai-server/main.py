@@ -24,7 +24,6 @@ if os.path.exists(env_path):
                 key, value = line.strip().split('=', 1)
                 os.environ[key] = value.strip('"').strip("'")
 
-# 💡 ご自身の Groq の API キーに書き換えてください
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
 class ChatInput(BaseModel):
@@ -106,7 +105,6 @@ async def chat_with_castle_ai(data: ChatInput):
         conn.close()
 
         if response.status != 200:
-            # 💡 何のエラーが返ってきたかをターミナルに出す
             print(f"🚨 Groq API がエラーを返しました: Status {response.status}")
             print(f"🚨 エラー詳細: {res_data.decode('utf-8')}")
             raise Exception(f"Groq API Error: Status {response.status}")
@@ -117,8 +115,7 @@ async def chat_with_castle_ai(data: ChatInput):
         return {"reply": ai_reply}
 
     except Exception as e:
-        # 💡 ここで例外のエラー内容を強制的にターミナルに出す
-        print(f"❌ 内部エラー発生: {str(e)}")
+        print(f"内部エラー発生: {str(e)}")
         raise HTTPException(status_code=500, detail="AI処理中にエラーが発生しました")
 
 if __name__ == "__main__":

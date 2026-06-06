@@ -140,7 +140,6 @@ export default function AdminDashboard(): React.JSX.Element {
     }
   }
 
-  // 💡 門番のチェック（セッション読み込み中）
   if (status === "loading") {
     return (
       <div className="flex justify-center items-center h-screen bg-[#f3deb9] text-[#aeac78] font-yuji">
@@ -149,7 +148,6 @@ export default function AdminDashboard(): React.JSX.Element {
     );
   }
 
-  // 💡 万が一未ログインでここに到達した場合の防衛線
   if (!session) {
     return (
       <div className="flex justify-center items-center h-screen bg-[#f3deb9] text-gray-700 font-sans">
@@ -177,7 +175,6 @@ export default function AdminDashboard(): React.JSX.Element {
     return true;
   });
 
-  // 💡 GitHubから取得した本名、またはメールアドレスを表示名にする
   const currentUserName = session.user?.name || session.user?.email || "ユーザー名";
 
   return (
@@ -199,7 +196,6 @@ export default function AdminDashboard(): React.JSX.Element {
             アカウント追加
           </button>
           
-          {/* 💡 本当に動くログアウトボタン */}
           <button 
             onClick={() => signOut({ callbackUrl: "/" })}
             className="border border-gray-400 hover:bg-white/40 px-3 py-1 rounded transition-colors text-xs text-gray-600 font-sans cursor-pointer"

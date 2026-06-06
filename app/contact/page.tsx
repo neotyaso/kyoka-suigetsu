@@ -24,7 +24,6 @@ export default function ContactIndex(): React.JSX.Element {
   const [processing, setProcessing] = useState<boolean>(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
-  // 簡易バリデーション関数
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
     if (!data.name.trim()) newErrors.name = "お名前を入力してください。";

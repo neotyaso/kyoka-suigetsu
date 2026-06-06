@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from 'next/link'; 
 import {itemVariants, fadeInUp, staggerContainer} from '../constants/animations';
 
 export default function HomeNews(): React.JSX.Element {
   const [latestNews, setLatestNews] = useState<any[]>([]);
 
-  // 画面が開いた瞬間に Hono からデータを取得
   useEffect(() => {
     async function fetchHomeNews() {
       try {
@@ -72,7 +71,6 @@ export default function HomeNews(): React.JSX.Element {
               </motion.div>
             ))
           )}
-          {/*重複していた線を1本に*/}
           <motion.span className="block mx-auto w-[91vw] md:w-[92.9vw] lg:w-[93vw] xl:w-[94vw] h-[0.1vh] bg-black mt-[0.7vh]" initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }} />
         </motion.div>
 

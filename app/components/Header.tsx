@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { motion, Variants } from "framer-motion";
 
-// メニューアイテムの型定義
 interface MenuItem {
   name: string;
   href: string;
@@ -68,7 +67,7 @@ export default function Header(): React.JSX.Element {
           ))}
         </motion.ul>
 
-        {/* ハンバーガーボタン（CSSとMotionの競合を解消） */}
+        {/* ハンバーガーボタン*/}
         <motion.button
           onClick={toggleMenu}
           className="fixed top-4 right-4 z-50 w-12 h-12 bg-white bg-opacity-70 md:bg-transparent rounded-full flex flex-col justify-center items-center space-y-1 hover:bg-opacity-90 md:hover:bg-transparent transition-all duration-300 lg:hidden"
