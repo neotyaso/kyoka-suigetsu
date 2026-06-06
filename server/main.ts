@@ -3,19 +3,15 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { PrismaClient } from '@prisma/client'
 
-
 const prisma = new PrismaClient() 
-
-
-
 const app = new Hono()
 
-
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000'
 app.use('/*', cors({
-  origin: 'http://localhost:3000',
+  origin: [frontendUrl, 'http://localhost:3000'], 
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 }))
-//お知らせを削除
+
 app.delete('/api/admin/news/:id', async (c) => {
   try {
     const id = Number(c.req.param('id'))
@@ -36,7 +32,6 @@ app.put('/api/admin/contacts/:id/read', async (c) => {
   try {
     const id = Number(c.req.param('id'))
     
-    //現在のデータを取得
     const existingContact = await prisma.contact.findUnique({ where: { id: id } })
     if (!existingContact) return c.json({ error: '対象が見つかりません' }, 404)
 
@@ -87,9 +82,7 @@ app.put('/api/admin/news/:id', async (c) => {
 app.get('/api/admin/contacts', async (c) => {
   try {
     const contacts = await prisma.contact.findMany({
-      orderBy: {
-        id: 'desc', 
-      },
+      orderBy: { id: 'desc' },
     })
     return c.json(contacts)
   } catch (error) {
@@ -101,9 +94,7 @@ app.get('/api/admin/contacts', async (c) => {
 app.get('/api/admin/news', async (c) => {
   try {
     const newsList = await prisma.news.findMany({
-      orderBy: {
-        id: 'desc', 
-      },
+      orderBy: { id: 'desc' },
     })
     return c.json(newsList)
   } catch (error) {
@@ -111,6 +102,7 @@ app.get('/api/admin/news', async (c) => {
   }
 })
 
+// 📤 新しいお知らせを投稿
 app.post('/api/admin/news', async (c) => {
   const body = await c.req.json()
   
@@ -122,7 +114,7 @@ app.post('/api/admin/news', async (c) => {
     }
   })
 
-  console.log('新しくお知らせが布告されました:', newPost)
+  console.log('新しくお知らせが投稿されました:', newPost)
   return c.json({ success: true, news: newPost })
 })
 
@@ -151,7 +143,9 @@ app.post('/api/castle-chat', async (c) => {
   try {
     const { message } = await c.req.json()
 
-    const pythonResponse = await fetch('http://127.0.0.1:8080/api/ai/chat', {
+    const pythonApiUrl = process.env.PYTHON_API_URL || 'http://127.0.0.1:8080'
+
+    const pythonResponse = await fetch(`${pythonApiUrl}/api/ai/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message })
@@ -169,7 +163,7 @@ app.post('/api/castle-chat', async (c) => {
   }
 })
 
-const port = 8000
-console.log(`Server is running on http://localhost:${port}`)
+const port = Number(process.env.PORT) || 8000
+console.log(`Server is running on port ${port}`)
 
 serve({ fetch: app.fetch, port })
