@@ -1,13 +1,11 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./prisma/dev.db"  // ← これに変更
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// 📢 お知らせの設計図
 model News {
   id      Int    @id @default(autoincrement())
   title   String
@@ -15,7 +13,6 @@ model News {
   date    String
 }
 
-// 📥 お問い合わせの設計図
 model Contact {
   id        Int      @id @default(autoincrement())
   name      String   
