@@ -1,11 +1,10 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
+  "main": "main.ts",   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "build": "prisma generate"  
+    "start": "npx tsx main.ts",   
+    "build": "prisma generate"
   },
   "dependencies": {
     "@hono/node-server": "^2.0.4",
@@ -13,6 +12,7 @@
     "hono": "^4.12.23"
   },
   "devDependencies": {
-    "prisma": "6.19.3"
+    "prisma": "6.19.3",
+    "tsx": "^4.x.x" 
   }
 }
