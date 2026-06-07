@@ -102,7 +102,7 @@ app.get('/api/admin/news', async (c) => {
   }
 })
 
-// 📤 新しいお知らせを投稿
+//新しいお知らせを投稿
 app.post('/api/admin/news', async (c) => {
   const body = await c.req.json()
   
