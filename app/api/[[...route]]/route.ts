@@ -4,7 +4,7 @@ import { handle } from 'hono/vercel'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient() 
-const app = new Hono().basePath('/api') 
+const app = new Hono()
 
 app.use('/*', cors({
   origin: '*',
