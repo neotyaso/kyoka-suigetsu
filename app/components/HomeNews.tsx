@@ -11,7 +11,7 @@ export default function HomeNews(): React.JSX.Element {
   useEffect(() => {
     async function fetchHomeNews() {
       try {
-        const res = await fetch('http://localhost:8000/api/admin/news');
+        const res = await fetch('/api/admin/news');
         if (res.ok) {
           const allNews = await res.json();
           // 最新の3件だけを切り取ってセット

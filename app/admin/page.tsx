@@ -25,7 +25,7 @@ interface AIAnalysis {
   reply_draft: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE_URL = "";
 
 export default function AdminDashboard(): React.JSX.Element {
   const [contacts, setContacts] = useState<Contact[]>([]);

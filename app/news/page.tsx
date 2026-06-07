@@ -25,12 +25,12 @@ export default function News(): React.JSX.Element {
   useEffect(() => {
     async function fetchNews() {
       try {
-        const res = await fetch('https://kyoka-suigetsu-backend.onrender.com/api/admin/news');
+        const res = await fetch('/api/admin/news');
         if (res.ok) {
           const data = await res.json();
           setNewsList(data);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("お知らせの取得に失敗しました:", error);
       } finally {
         setLoading(false);
