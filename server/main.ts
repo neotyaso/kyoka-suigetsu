@@ -146,8 +146,8 @@ app.post('/api/contacts', async (c) => {
     console.log('データベースにお問い合わせが記録されました:', newContact)
     return c.json({ success: true, contact: newContact })
   } catch (error) {
-    console.error(error)
-    return c.json({ error: 'お問い合わせの送信に失敗しました' }, 500)
+    console.error('お問い合わせ送信エラー:', error)
+    return c.json({ error: 'お問い合わせの送信に失敗しました', details: error.message }, 500)
   }
 })
 
