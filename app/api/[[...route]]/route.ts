@@ -144,7 +144,5 @@ app.post('/castle-chat', async (c) => {
 })
 
 export const RequestHandler = handle(app)
-export const GET = RequestHandler
-export const POST = RequestHandler
-export const PUT = RequestHandler
-export const DELETE = RequestHandler
+const handler = handle(app);
+export { handler as GET, handler as POST, handler as PUT, handler as DELETE };
