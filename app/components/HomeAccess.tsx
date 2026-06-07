@@ -79,7 +79,7 @@ export default function HomeAccess(): React.JSX.Element {
     >
       <section>
         {/* ヘッダー部分 */}
-        <motion.div className='bg-[url("/images/Home/take.jpg")] bg-cover bg-center flex justify-center' variants={fadeInUp}>
+        <motion.div className='bg-[url("/images/home/take.jpg")] bg-cover bg-center flex justify-center' variants={fadeInUp}>
           <div className="flex items-center">
             <motion.div className="h-[10vh] md:h-[12.5vh] lg:h-[14vh] w-px bg-black mr-[4vw] mt-[-13vh] md:mt-[-18vh] lg:mt-[-19vh] xl:mt-[-30vh]" initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }} />
             <motion.h1 className="[writing-mode:vertical-rl] font-yuji font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl" variants={fadeInUp}>

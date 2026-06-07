@@ -23,7 +23,7 @@ export default function HomeHeader(): React.JSX.Element {
 
     return (
       /* トップの画像セクション */
-      <div className="bg-[url('/images/Home/sumi_maho.jpg')] bg-center bg-cover h-[110vh] md:h-[150vh] lg:h-[190vh] xl:h-[230vh] relative">
+      <div className="bg-[url('/images/home/sumi_maho.jpg')] bg-center bg-cover h-[110vh] md:h-[150vh] lg:h-[190vh] xl:h-[230vh] relative">
         <motion.header
           className="fixed top-0 left-0 right-0 z-30 flex justify-between lg:font-bold font-yuji text-[#5c554f] bg-white shadow-md"
           initial={{ opacity: 0, y: -20 }}

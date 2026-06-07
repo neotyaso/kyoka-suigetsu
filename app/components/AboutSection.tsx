@@ -13,7 +13,7 @@ export default function AboutSection(): React.JSX.Element {
             variants={staggerContainer}
         >
         <motion.img
-          src="/images/Home/matsu.jpg"
+          src="/images/home/matsu.jpg"
           alt="竹のイラスト"
           className="mx-auto"
           variants={fadeInUp}

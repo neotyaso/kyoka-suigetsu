@@ -28,16 +28,16 @@ export default function HighlightsSlider(): React.JSX.Element {
               className="h-full"
             >
               <SwiperSlide>
-                <motion.img src="/images/Highlight/sakura_siki.jpg" alt="春の城" className="w-full h-full object-cover" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} />
+                <motion.img src="/images/highlight/sakura_siki.jpg" alt="春の城" className="w-full h-full object-cover" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} />
               </SwiperSlide>
               <SwiperSlide>
-                <motion.img src="/images/Highlight/siro.jpg" alt="城" className="w-full h-full object-cover" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} />
+                <motion.img src="/images/highlight/siro.jpg" alt="城" className="w-full h-full object-cover" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} />
               </SwiperSlide>
               <SwiperSlide>
-                <motion.img src="/images/Highlight/momizi-2.jpg" alt="秋の城" className="w-full h-full object-cover" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} />
+                <motion.img src="/images/highlight/momizi-2.jpg" alt="秋の城" className="w-full h-full object-cover" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} />
               </SwiperSlide>
               <SwiperSlide>
-                <motion.img src="/images/Highlight/yuki.jpg" alt="冬の城" className="w-full h-full object-cover" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} />
+                <motion.img src="/images/highlight/yuki.jpg" alt="冬の城" className="w-full h-full object-cover" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} />
               </SwiperSlide>
             </Swiper>
           </motion.section>
