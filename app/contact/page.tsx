@@ -46,7 +46,7 @@ export default function ContactIndex(): React.JSX.Element {
   setProcessing(true);
 
   try {
-    const response = await fetch('http://localhost:8000/api/contacts', {
+    const response = await fetch('https://kyoka-suigetsu-backend.onrender.com/api/contacts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
