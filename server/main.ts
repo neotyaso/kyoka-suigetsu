@@ -6,10 +6,22 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient() 
 const app = new Hono()
 
-const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000'
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:3000',
+  'https://kyoka-suigetsu-alpha.vercel.app' 
+].filter(Boolean) as string[]
+
 app.use('/*', cors({
-  origin: [frontendUrl, 'http://localhost:3000'], 
+  origin: (origin) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      return origin
+    }
+    return 'http://localhost:3000' 
+  },
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }))
 
 app.delete('/api/admin/news/:id', async (c) => {
