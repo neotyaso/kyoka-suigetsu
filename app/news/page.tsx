@@ -25,7 +25,7 @@ export default function News(): React.JSX.Element {
   useEffect(() => {
     async function fetchNews() {
       try {
-        const res = await fetch('http://localhost:8000/api/admin/news');
+        const res = await fetch('https://kyoka-suigetsu-backend.onrender.com/api/admin/news');
         if (res.ok) {
           const data = await res.json();
           setNewsList(data);
@@ -41,13 +41,13 @@ export default function News(): React.JSX.Element {
 
   return (
     <AppLayout>
-      <section className="bg-[url('/images/News/bg_sui.png')] bg-cover pb-[5vh]">
+      <section className="bg-[url('/images/news/bg_sui.png')] bg-cover pb-[5vh]">
         <div className="relative w-full h-[25vh] md:h-[35vh] lg:h-[45vh] xl:h-[64vh]">
           <motion.img
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, ease: "easeInOut" }}
-            src="/images/News/news_top.jpg"
+            src="/images/news/news_top.jpg"
             alt="鶴の画像"
             className="w-full h-full object-cover object-center"
           />
