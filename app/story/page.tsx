@@ -186,7 +186,7 @@ export default function Story(): React.JSX.Element {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 2, ease: "easeInOut" }}
-        className="bg-[url('/images/History/combined_left_right.png')] md:bg-[url('/images/History/bg_maho.png')] lg:bg-[url('/images/History/bg_maho2.jpg')] bg-cover bg-center bg-fixed min-h-screen text-gray-800 pb-20"
+        className="bg-[url('/images/history/combined_left_right.png')] md:bg-[url('/images/history/bg_maho.png')] lg:bg-[url('/images/history/bg_maho2.jpg')] bg-cover bg-center bg-fixed min-h-screen text-gray-800 pb-20"
       >
         {/* ヒーローイメージ ＆ 縦書きポエム */}
         <section className="relative w-full overflow-hidden">
@@ -194,7 +194,7 @@ export default function Story(): React.JSX.Element {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 2, ease: "easeInOut" }}
-            src="/images/History/siro_sui.png"
+            src="/images/history/siro_sui.png"
             alt="城の水墨画"
             className="h-[30vh] w-full md:h-[50vh] lg:h-[65vh] xl:h-[75vh] object-cover"
           />
