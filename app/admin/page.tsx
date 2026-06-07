@@ -25,6 +25,8 @@ interface AIAnalysis {
   reply_draft: string;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function AdminDashboard(): React.JSX.Element {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [news, setNews] = useState<News[]>([]);
@@ -40,14 +42,13 @@ export default function AdminDashboard(): React.JSX.Element {
   const [analyzingId, setAnalyzingId] = useState<number | null>(null);
   const [aiResults, setAiResults] = useState<{ [key: number]: AIAnalysis }>({});
 
-  // 💡 NextAuthからログイン中のセッション情報を取得
   const { data: session, status } = useSession();
 
   async function fetchAdminData() {
     try {
       const [contactsRes, newsRes] = await Promise.all([
-        fetch('http://localhost:8000/api/admin/contacts'),
-        fetch('http://localhost:8000/api/admin/news')
+        fetch(`${API_BASE_URL}/api/admin/contacts`),
+        fetch(`${API_BASE_URL}/api/admin/news`)
       ]);
       const contactsData = await contactsRes.json();
       const newsData = await newsRes.json();
@@ -56,7 +57,7 @@ export default function AdminDashboard(): React.JSX.Element {
     } catch (error) {
       console.error("データ取得エラー:", error);
     } finally {
-      setLoading(false);
+      loading && setLoading(false);
     }
   }
 
@@ -66,11 +67,10 @@ export default function AdminDashboard(): React.JSX.Element {
     }
   }, [status]);
 
-  // 🗑️ お知らせを削除する関数
   async function handleDeleteNews(id: number) {
     if (!confirm("このお知らせを削除しますか？")) return;
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/news/${id}`, { method: 'DELETE' });
+      const response = await fetch(`${API_BASE_URL}/api/admin/news/${id}`, { method: 'DELETE' });
       if (response.ok) await fetchAdminData();
       else alert("削除に失敗しました。");
     } catch (error) {
@@ -90,7 +90,7 @@ export default function AdminDashboard(): React.JSX.Element {
     if (!newTitle || !newContent) return alert("件名と本文を入力してください。");
     setIsSubmitting(true);
     try {
-      const url = editingNewsId ? `http://localhost:8000/api/admin/news/${editingNewsId}` : 'http://localhost:8000/api/admin/news';
+      const url = editingNewsId ? `${API_BASE_URL}/api/admin/news/${editingNewsId}` : `${API_BASE_URL}/api/admin/news`;
       const method = editingNewsId ? 'PUT' : 'POST';
       const response = await fetch(url, {
         method: method,
@@ -115,7 +115,7 @@ export default function AdminDashboard(): React.JSX.Element {
 
   async function handleMarkAsRead(id: number) {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/contacts/${id}/read`, { method: 'PUT' });
+      const response = await fetch(`${API_BASE_URL}/api/admin/contacts/${id}/read`, { method: 'PUT' });
       if (response.ok) await fetchAdminData();
       else alert("状態の更新に失敗しました。");
     } catch (error) {
@@ -126,7 +126,7 @@ export default function AdminDashboard(): React.JSX.Element {
   async function handleAIAnalyze(id: number) {
     setAnalyzingId(id);
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/contacts/${id}/analyze`, { method: 'POST' });
+      const response = await fetch(`${API_BASE_URL}/api/admin/contacts/${id}/analyze`, { method: 'POST' });
       if (response.ok) {
         const data = await response.json();
         if (data.success) setAiResults(prev => ({ ...prev, [id]: data.analysis }));
@@ -280,6 +280,16 @@ export default function AdminDashboard(): React.JSX.Element {
                           )}
                           <h4 className="font-bold text-gray-800 text-base">{isContact ? `${(item as any).name} 様より` : (item as any).title}</h4>
                           
+                          {isContact && (
+                            <button
+                              onClick={() => handleAIAnalyze(item.id)}
+                              disabled={analyzingId === item.id}
+                              className="text-[11px] bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-0.5 rounded font-sans transition-colors font-bold disabled:opacity-50 ml-2 cursor-pointer"
+                            >
+                              {analyzingId === item.id ? "解析中..." : "✨ AI解析・返答生成"}
+                            </button>
+                          )}
+
                           {isContact && analysis && (
                             <div className="flex space-x-1.5 font-sans text-[10px]">
                               <span className="bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded border border-blue-200 font-bold">📦 {analysis.category}</span>
