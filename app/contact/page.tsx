@@ -67,7 +67,7 @@ export default function ContactIndex(): React.JSX.Element {
   return (
     <AppLayout>
       {/* ヒーローセクション */}
-      <div className="bg-[url('/images/Contact/meyasu.png')] bg-cover bg-center h-[23vh] md:h-[30vh] lg:h-[45vh] xl:h-[55vh]">
+      <div className="bg-[url('/images/contact/meyasu.png')] bg-cover bg-center h-[23vh] md:h-[30vh] lg:h-[45vh] xl:h-[55vh]">
         <h1 className="font-yuji text-center text-black pt-[6.5vh] md:pt-[11vh] lg:pt-[15vh] xl:pt-[17vh] text-4xl md:text-6xl lg:text-8xl xl:text-9xl">
           お問い合わせ
         </h1>
