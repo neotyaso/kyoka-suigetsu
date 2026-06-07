@@ -17,6 +17,7 @@ app.use('/*', cors({
   allowHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }))
+// 👆 ここまでを上書きする
 
 
 app.delete('/api/admin/news/:id', async (c) => {
