@@ -10,28 +10,28 @@ const seasonsData: Record<SeasonKey, SeasonItem> = {
     name: "春",
     detail: "桜あふれる満開の城",
     description: "暖かな春の陽射しに包まれた城では、満開の桜が一斉に花を咲かせ、淡いピンクの花びらが風に舞い踊ります。新緑の若葉と桜のコントラストが美しく、生命の息づかいを感じられる季節です。",
-    image: "/images/Highlight/sakura_siki.jpg",
+    image: "/images/highlight/sakura_siki.jpg",
     buttonColor: "bg-pink-200 hover:bg-pink-300 text-pink-900"
   },
   summer: {
     name: "夏",
     detail: "蛍舞う幻想の城",
     description: "夏の夜、城の庭園では無数の蛍が幻想的な光を放ちながら舞い踊ります。青い月光と蛍の淡い光が織りなす光景は、まるで星空が地上に降りてきたかのような美しさです。",
-    image: "/images/Highlight/natsu.jpg",
+    image: "/images/highlight/natsu.jpg",
     buttonColor: "bg-green-200 hover:bg-green-300 text-green-900"
   },
   autumn: {
     name: "秋",
     detail: "紅葉に染まる古城",
-    description: "秋の深まりとともに、城の周りは燃えるような紅葉に包まれます。赤や黄金色に染まった葉が風に舞い散る様子は、時の流れの美しさと儚さを物語っています。",
-    image: "/images/Highlight/momizi-2.jpg",
+    description: "秋の深まりとともに、城の周りは燃えるような紅葉に包めます。赤や黄金色に染まった葉が風に舞い散る様子は、時の流れの美しさと儚さを物語っています。",
+    image: "/images/highlight/momizi-2.jpg",
     buttonColor: "bg-orange-200 hover:bg-orange-300 text-orange-900"
   },
   winter: {
     name: "冬",
     detail: "雪化粧の静寂城",
     description: "純白の雪に覆われた城は、静寂の中に凛とした美しさを湛えています。雪の結晶が月光に輝き、まるでダイヤモンドダストのような幻想的な光景を作り出します。",
-    image: "/images/Highlight/yuki.jpg",
+    image: "/images/highlight/yuki.jpg",
     buttonColor: "bg-blue-200 hover:bg-blue-300 text-blue-900"
   }
 };
@@ -42,11 +42,11 @@ export default function Highlight(): React.JSX.Element {
 
   return (
     <AppLayout>
-      <div className="bg-[url('/images/Highlight/highbg2.jpg')] xl:bg-[url('/images/Highlight/highbg2xl.jpg')] overflow-hidden">
+      <div className="bg-[url('/images/highlight/highbg2.jpg')] xl:bg-[url('/images/highlight/highbg2xl.jpg')] overflow-hidden">
         <section id="highlights" className="max-w-full overflow-hidden">
           
           <div className="hidden md:block relative">
-            <img src="/images/Highlight/siro_sui.png" alt="桜の画像" className="h-[38vh] w-full object-cover brightness-90 lg:h-[50vh] xl:h-[60vh]" />
+            <img src="/images/highlight/siro_sui.png" alt="桜の画像" className="h-[38vh] w-full object-cover brightness-90 lg:h-[50vh] xl:h-[60vh]" />
             <motion.div
               className="absolute inset-0 bg-black/20 z-0"
               initial={{ opacity: 0 }}
@@ -73,7 +73,7 @@ export default function Highlight(): React.JSX.Element {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 2.5 }}
-              src="/images/Highlight/mon.jpg" alt="門開いてる画像" className="w-full h-[35vh] object-cover md:h-[70vh] md:mt-[10vh] lg:h-[74vh] xl:h-[90vh] xl:w-[50vw] xl:mt-[14vh]"
+              src="/images/highlight/mon.jpg" alt="門開いてる画像" className="w-full h-[35vh] object-cover md:h-[70vh] md:mt-[10vh] lg:h-[74vh] xl:h-[90vh] xl:w-[50vw] xl:mt-[14vh]"
             />
             <div className="xl:w-[45vw] xl:mt-[14vh]">
               <motion.h2
@@ -107,7 +107,7 @@ export default function Highlight(): React.JSX.Element {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.2, delay: 0.2 }}
-              src="/images/Highlight/siro.jpg" alt="水鏡の間" className="w-full h-[25vh] mt-[11vh] object-cover md:w-full md:h-[48vh] md:mt-[13vh] lg:w-full lg:h-[60vh] xl:w-[60vw] xl:h-[70vh] xl:mt-[25vh]"
+              src="/images/highlight/siro.jpg" alt="水鏡の間" className="w-full h-[25vh] mt-[11vh] object-cover md:w-full md:h-[48vh] md:mt-[13vh] lg:w-full lg:h-[60vh] xl:w-[60vw] xl:h-[70vh] xl:mt-[25vh]"
             />
             <div className="xl:mt-[25vh]">
               <motion.h2
@@ -139,7 +139,7 @@ export default function Highlight(): React.JSX.Element {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1.2, delay: 0.2 }}
-              src="/images/Highlight/tikurin.jpg" alt="夜景" className="w-[92.4vw] h-[52vw] ml-[4vw] mt-[11vh] md:h-[48vh] md:w-[90.6vw] md:mt-[13vh] md:ml-[5vw] xl:w-[60vw] xl:h-[70vh] xl:mt-[25vh] xl:ml-0 object-cover"
+              src="/images/highlight/tikurin.jpg" alt="夜景" className="w-[92.4vw] h-[52vw] ml-[4vw] mt-[11vh] md:h-[48vh] md:w-[90.6vw] md:mt-[13vh] md:ml-[5vw] xl:w-[60vw] xl:h-[70vh] xl:mt-[25vh] xl:ml-0 object-cover"
             />
             <div className="xl:mt-[25vh]">
               <motion.h2
@@ -167,11 +167,8 @@ export default function Highlight(): React.JSX.Element {
             transition={{ duration: 1.2 }}
             className="mb-16 xl:flex xl:gap-[4vw] xl:flex-row-reverse"
           >
-            <motion.img
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.2, delay: 0.2 }}
-              src="/images/Highlight/sakura.jpg" alt="庭" className="w-[92.4vw] h-[52vw] ml-[4vw] mt-[11vh] md:h-[48vh] md:w-[90.6vw] md:mt-[13vh] md:ml-[5vw] xl:w-[60vw] xl:h-[70vh] xl:mt-[25vh] xl:ml-0 object-cover"
+            <img
+              src="/images/highlight/sakura.jpg" alt="庭" className="w-[92.4vw] h-[52vw] ml-[4vw] mt-[11vh] md:h-[48vh] md:w-[90.6vw] md:mt-[13vh] md:ml-[5vw] xl:w-[60vw] xl:h-[70vh] xl:mt-[25vh] xl:ml-0 object-cover"
             />
             <div className="xl:mt-[25vh]">
               <motion.h2
@@ -195,16 +192,16 @@ export default function Highlight(): React.JSX.Element {
 
           <div className="mx-[4vw] mt-[11vh] grid grid-cols-2 md:mt-[13vh] md:ml-[5vw] max-w-full xl:mt-[30vh] xl:mx-[2vw] mb-[5vh]">
             <motion.div whileHover={{ scale: 1.1, x: -10, y: -10 }} className="w-full cursor-pointer">
-              <img onClick={() => setSelectedSeason("spring")} src="/images/Highlight/sakura_siki.jpg" alt="春城" className="w-full h-auto object-cover" />
+              <img onClick={() => setSelectedSeason("spring")} src="/images/highlight/sakura_siki.jpg" alt="春城" className="w-full h-auto object-cover" />
             </motion.div>
             <motion.div whileHover={{ scale: 1.1, x: 10, y: -10 }} className="w-full cursor-pointer">
-              <img onClick={() => setSelectedSeason("summer")} src="/images/Highlight/natsu.jpg" alt="夏城" className="w-full h-auto object-cover" />
+              <img onClick={() => setSelectedSeason("summer")} src="/images/highlight/natsu.jpg" alt="夏城" className="w-full h-auto object-cover" />
             </motion.div>
             <motion.div whileHover={{ scale: 1.1, x: -10, y: 10 }} className="w-full cursor-pointer">
-              <img onClick={() => setSelectedSeason("autumn")} src="/images/Highlight/momizi-2.jpg" alt="秋城" className="w-full h-auto object-cover" />
+              <img onClick={() => setSelectedSeason("autumn")} src="/images/highlight/momizi-2.jpg" alt="秋城" className="w-full h-auto object-cover" />
             </motion.div>
             <motion.div whileHover={{ scale: 1.1, x: 10, y: 10 }} className="w-full cursor-pointer">
-              <img onClick={() => setSelectedSeason("winter")} src="/images/Highlight/yuki.jpg" alt="冬城" className="w-full h-auto object-cover" />
+              <img onClick={() => setSelectedSeason("winter")} src="/images/highlight/yuki.jpg" alt="冬城" className="w-full h-auto object-cover" />
             </motion.div>
           </div>
 
